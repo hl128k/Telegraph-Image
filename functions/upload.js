@@ -25,10 +25,10 @@ export async function onRequestPost(context) {  // Contents of context object
     } = context;
     const ref=request.headers.get('Referer');
     const url1= new URL(ref)
-    const refparam = new URLSearchParams(url.search);
+    const refparam = new URLSearchParams(url1.search);
     const autcode=refparam.get('authcode');
     if(autcode==env.AUTH_CODE){
-        const url2=new URL(request.url)
+        const url2 = new URL(request.url)
         const url = new URL(url2.protocol + '//' + url2.host + '/upload' + url2.search);
         
         const clonedRequest = request.clone();

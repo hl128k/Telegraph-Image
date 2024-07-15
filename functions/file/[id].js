@@ -9,7 +9,7 @@ export async function onRequest(context) {  // Contents of context object
     } = context;
 
     const url = new URL(request.url);
-    let Referer = request.headers.get('Referer') || "Referer"
+    let Referer = request.headers.get('Referer')
     if (Referer) {
         try {
             let refererUrl = new URL(Referer)
@@ -22,7 +22,7 @@ export async function onRequest(context) {  // Contents of context object
               return Response.redirect(url.origin + "/block-img.html", 302);
             }  
         } catch (e) {
-            return new Response('Invalid Referer URL', { status: 400 });
+            return Response.redirect(url.origin + "/block-img.html", 302);
         }
     }
     

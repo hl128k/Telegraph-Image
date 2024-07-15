@@ -24,18 +24,17 @@ export async function onRequestPost(context) {  // Contents of context object
         data, // arbitrary space for passing data between middlewares 
     } = context;
     const ref=request.headers.get('Referer');
-    const url= new URL(ref)
+    const url1= new URL(ref)
     const refparam = new URLSearchParams(url.search);
     const autcode=refparam.get('authcode');
     
     if(autcode==env.AUTH_CODE){
-        const url1=new URL(request.url)
+        const url2=new URL(request.url)
         const url = new URL(url1.protocol + '//' + url1.host + '/upload' + url1.search);
         
         const clonedRequest = request.clone();
         await errorHandling(context);
         telemetryData(context);
-        const url = new URL(url);
         const response = fetch('https://telegra.ph/' + url.pathname + url.search, {
             method: clonedRequest.method,
             headers: clonedRequest.headers,

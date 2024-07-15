@@ -10,15 +10,22 @@ export async function onRequest(context) {  // Contents of context object
 
     const url = new URL(request.url);
     let Referer = request.headers.get('Referer') || "Referer"
-    let refererUrl = new URL(Referer)
-    let allowedDomains = env.ALLOWED_DOMAINS.split(','); 
-    let isAllowed = allowedDomains.some(domain => {
-      let domainPattern = new RegExp(`(^|\\.)${domain}$`);
-      return domainPattern.test(refererUrl.hostname);
-    });
-    if (!isAllowed) {
-      return Response.redirect(url.origin + "/block-img.html", 302);
+    if (Referer) {
+        try {
+            let refererUrl = new URL(Referer)
+            let allowedDomains = env.ALLOWED_DOMAINS.split(','); 
+            let isAllowed = allowedDomains.some(domain => {
+              let domainPattern = new RegExp(`(^|\\.)${domain}$`);
+              return domainPattern.test(refererUrl.hostname);
+            });
+            if (!isAllowed) {
+              return Response.redirect(url.origin + "/block-img.html", 302);
+            }  
+        } catch (e) {
+            return new Response('Invalid Referer URL', { status: 400 });
+        }
     }
+    
     const response = fetch('https://telegra.ph/' + url.pathname + url.search, {
         method: request.method,
         headers: request.headers,

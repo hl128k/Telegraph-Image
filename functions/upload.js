@@ -27,7 +27,6 @@ export async function onRequestPost(context) {  // Contents of context object
     const url1= new URL(ref)
     const refparam = new URLSearchParams(url.search);
     const autcode=refparam.get('authcode');
-    console.log("new request url:"+url)
     if(autcode==env.AUTH_CODE){
         const url2=new URL(request.url)
         const url = new URL(url1.protocol + '//' + url1.host + '/upload' + url1.search);

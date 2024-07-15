@@ -29,7 +29,7 @@ export async function onRequestPost(context) {  // Contents of context object
     const autcode=refparam.get('authcode');
     if(autcode==env.AUTH_CODE){
         const url2=new URL(request.url)
-        const url = new URL(url1.protocol + '//' + url1.host + '/upload' + url1.search);
+        const url = new URL(url2.protocol + '//' + url2.host + '/upload' + url2.search);
         
         const clonedRequest = request.clone();
         await errorHandling(context);

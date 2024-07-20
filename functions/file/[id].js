@@ -10,23 +10,21 @@ export async function onRequest(context) {  // Contents of context object
 
     const url = new URL(request.url);
     let Referer = request.headers.get('Referer')
-    return Response.redirect(url.origin + "/block-img.html", 302);
     if (Referer) {
         try {
             let refererUrl = new URL(Referer);
-
             if (env.ALLOWED_DOMAINS && env.ALLOWED_DOMAINS.trim() !== '') {
                 let allowedDomains = env.ALLOWED_DOMAINS.split(',');
                 let isAllowed = allowedDomains.some(domain => {
-                    let domainPattern = new RegExp(`(^|\\.)${domain}$`);
+                    let domainPattern = new RegExp(`(^|\\.)${domain.replace('.', '\\.')}$`); // Escape dot in domain
                     return domainPattern.test(refererUrl.hostname);
                 });
                 if (!isAllowed) {
-                    return Response.redirect(url.origin + "/block-img.html", 302);
+                    return Response.redirect(new URL("/block-img.html", request.url).href, 302); // Ensure URL is correctly formed
                 }
             }
         } catch (e) {
-            return Response.redirect(url.origin + "/block-img.html", 302);
+            return Response.redirect(new URL("/block-img.html", request.url).href, 302); // Ensure URL is correctly formed
         }
     }
 

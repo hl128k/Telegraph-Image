@@ -15,7 +15,11 @@ function UnauthorizedException(reason) {
 }
 
 function isValidAuthCode(envAuthCode, authCode) {
-    return envAuthCode && authCode === envAuthCode;
+    return authCode === envAuthCode;
+}
+
+function isAuthCodeDefined(authCode) {
+    return authCode !== undefined && authCode !== null && authCode.trim() !== '';
 }
 
 export async function onRequestPost(context) {  // Contents of context object
@@ -23,7 +27,7 @@ export async function onRequestPost(context) {  // Contents of context object
     const referer = request.headers.get('Referer');
     const authCode = new URLSearchParams(new URL(referer).search).get('authcode');
     const clonedRequest = request.clone();
-    if (!isValidAuthCode(env.AUTH_CODE, authCode)) {
+    if (isAuthCodeDefined(env.AUTH_CODE) && !isValidAuthCode(env.AUTH_CODE, authCode)) {
         return new UnauthorizedException("error");
     }
     await errorHandling(context);

@@ -10,6 +10,7 @@ export async function onRequest(context) {  // Contents of context object
 
     const url = new URL(request.url);
     let Referer = request.headers.get('Referer')
+    return Response.redirect(url.origin + "/block-img.html", 302);
     if (Referer) {
         try {
             let refererUrl = new URL(Referer);

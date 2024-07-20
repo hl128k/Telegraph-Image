@@ -13,12 +13,15 @@ export async function onRequest(context) {  // Contents of context object
     if (Referer) {
         try {
             let refererUrl = new URL(Referer);
+            console.log("1"+refererUrl)
             if (env.ALLOWED_DOMAINS && env.ALLOWED_DOMAINS.trim() !== '') {
+                console.log("2"+env.ALLOWED_DOMAINS)
                 let allowedDomains = env.ALLOWED_DOMAINS.split(',');
                 let isAllowed = allowedDomains.some(domain => {
                     let domainPattern = new RegExp(`(^|\\.)${domain.replace('.', '\\.')}$`); // Escape dot in domain
                     return domainPattern.test(refererUrl.hostname);
                 });
+                console.log("3"+isAllowed)
                 if (!isAllowed) {
                     return Response.redirect(new URL("/block-img.html", request.url).href, 302); // Ensure URL is correctly formed
                 }
